@@ -1,0 +1,13 @@
+[package]
+name = "mandelbrot"
+version = "0.1.0"
+authors = ["Thomas Belahi <belahi@ipgp.fr>"]
+
+[dependencies]
+libc = "*"
+num = "*"
+
+[lib]
+name = "mandelbrot"
+crate-type = ["dylib"]
+
