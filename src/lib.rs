@@ -14,6 +14,9 @@ fn it_works() {
     assert!(x[0][0] == 0.0);
 }
 
+//
+// type needed FFI
+//
 #[repr(C)]
 pub struct Array {
     data: *const c_void,
@@ -35,6 +38,8 @@ impl Array {
     }
 }
 
+/// square mandelbrot function, returns mandelbrot set for a different number of pixel set by SIZE
+/// and iterations for convergence or not
 #[no_mangle]
 pub extern fn mandelbrot(SIZE:usize, maxiteration:i32) -> Vec<Vec<f64>> {
     let x = (0..SIZE).map(|i| -2.5 + (i as f64)*(4.0/(SIZE-1) as f64 )).collect::<Vec<f64>>();
@@ -70,9 +75,9 @@ pub extern fn mandelbrot(SIZE:usize, maxiteration:i32) -> Vec<Vec<f64>> {
     return res
 }
 
+/// wrapper function to mandelbrot to allow calling via FFI
 #[no_mangle]
 pub extern fn mandelffi(N:size_t, maxit:uint32_t ) -> Array {
-//pub extern fn mandelffi(N:size_t, maxit:uint32_t ) -> uint32_t {
     let res = mandelbrot(N as usize, maxit as i32);
     let mut res_flat = iter::repeat(0f64).take((N*N) as usize).collect::<Vec<f64>>();
     let SIZE = N as usize;
